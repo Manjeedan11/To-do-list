@@ -7,7 +7,7 @@ This project is a web application that includes both backend and frontend compon
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/Manjeedan11/To-do-list
    ```
 
 2. Navigate to the backend directory:
