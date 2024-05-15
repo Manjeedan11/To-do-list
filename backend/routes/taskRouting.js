@@ -3,6 +3,17 @@ const router = express.Router();
 const Task = require('../models/task');
 
 
+
+router.get('/tasks', async (req, res) => {
+    try {
+      const tasks = await Task.find({});
+      res.send(tasks);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+
+
 router.post('/tasks', async (req, res) => {
   try {
     const task = new Task(req.body);
