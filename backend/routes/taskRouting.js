@@ -27,7 +27,7 @@ router.post('/tasks', async (req, res) => {
 
 router.put('/tasks/:id', async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['title', 'description', 'completed'];
+    const allowedUpdates = ['title','completed'];
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
   
     if (!isValidOperation) {
