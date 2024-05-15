@@ -13,18 +13,15 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-
     email: {
         type: String,
         required: true,
         unique: true
     },
-
     password: {
         type: String,
         required: true
     },
-
     salt: {
         type: String,
         required: true
@@ -35,19 +32,45 @@ const User = mongoose.model("User", userSchema);
 
 const validate = (data) => {
     const schema = Joi.object({
-        username: Joi.string().regex(/^[a-zA-Z0-9_]{3,30}$/).required().label("Username")
-        .message({
-            'string.pattern.base': 'Username must contain only letters, numbers, and underscores and be between 3 to 30 characters long'
-        }),
-        email: Joi.string().email({minDomainSegments: 2, tlds: { allow: ['com', 'net']}}).required().label("Email")
-        .message({
-            'string.email': 'Invalid email format',
-            'string.empty': 'Email is required'
-        }),
-        password: Joi.string().min(8).required().label("Password")
-        .messages({
-            'string.min': 'Password must be minimum 8 characters long',
-        })
+        username: Joi.string().alphanum().min(3).max(30).required(),
+        email: Joi.string().email({ minDomainSegments: 2 }).required(),
+        password: Joi.string().min(8).required(),
     });
     return schema.validate(data);
-}
+};
+
+const hashPassword = (password, salt) => {
+    return crypto.pbkdf2Sync(password, Buffer.from(salt, 'hex'), HASH_ITERATIONS, HASH_KEY_LENGTH, HASH_ALGORITHM).toString('hex');
+};
+
+const createUser = async (userData) => {
+    try {
+        const { error } = validate(userData);
+        if (error) {
+            throw new Error(error.details.map(detail => detail.message).join(', '));
+        }
+
+        const existingUser = await User.findOne({ $or: [{ email: userData.email }, { username: userData.username }] });
+        if (existingUser) {
+            throw new Error('User already exists with the same username or email');
+        }
+
+        const salt = crypto.randomBytes(SALT_LENGTH).toString('hex');
+        const hashedPassword = hashPassword(userData.password, salt);
+
+        const user = new User({
+            username: userData.username,
+            email: userData.email,
+            password: hashedPassword,
+            salt: salt
+        });
+
+        await user.save();
+        return user;
+    } catch (error) {
+        console.error("Error creating user", error);
+        throw error;
+    }
+};
+
+module.exports = { User, createUser, validate };
