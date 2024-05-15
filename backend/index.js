@@ -5,6 +5,7 @@ const connectToDatabase = require('./db');
 const taskRoutes = require('./routes/taskRouting');
 
 app.use(express.json());
+app.use(taskRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
