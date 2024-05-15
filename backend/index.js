@@ -4,8 +4,8 @@ const cors = require('cors');
 const app = express();
 const connectToDatabase = require('./db');
 const taskRoutes = require('./routes/taskRouting');
-const userRoutes = require('./routes/userRouting')
-const authRoutes = require('./routes/authRouting')
+const userRoutes = require('./routes/userRouting');
+const authRoutes = require('./routes/authRouting');
 
 app.use(express.json());
 app.use(cors());
