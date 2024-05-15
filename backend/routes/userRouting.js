@@ -3,7 +3,7 @@ const { createUser, validate } = require("../models/user");
 
 router.post("/", async (req, res) => {
     try {
-        // Validate user input
+        
         const { error } = validate(req.body);
         if (error) {
             return res.status(400).send({ message: error.details[0].message });
