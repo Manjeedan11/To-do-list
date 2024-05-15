@@ -46,6 +46,8 @@ This project is a web application that includes both backend and frontend compon
 
 9. If the browser does not open automatically, you can manually navigate to `http://localhost:5500/frontend/auth/index.html` to view the authentication page.
 
+10. Please note that the MongoDB URL is currently configured to allow unrestricted access.
+
 ## Usage
 
 - **Authentication**: The authentication page allows users to log in or sign up. Upon successful authentication, users are redirected to the to-do list page.
